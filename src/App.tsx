@@ -1,25 +1,15 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router";
 import { publicApiAxios } from "./config/axios";
-
-interface Book {
-  _id: string;
-  title: string;
-  author: string;
-  description?: string;
-  publishedDate?: string;
-  coverImage?: string;
-  user: {
-    _id: string;
-    name: string;
-    lastName: string;
-  };
-}
+import type { Book } from "./types/books";
 
 function App() {
   const [books, setBooks] = useState<Book[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState<string>("");
+
+  const navigate = useNavigate();
 
   const fetchBooks = async () => {
     try {
@@ -38,11 +28,11 @@ function App() {
     fetchBooks();
   }, []);
 
-  // Filtrado
   const filteredBooks = useMemo(() => {
-    return books.filter((book) =>
-      book.title.toLowerCase().includes(search.toLowerCase()) ||
-      book.author.toLowerCase().includes(search.toLowerCase())
+    return books.filter(
+      (book) =>
+        book.title.toLowerCase().includes(search.toLowerCase()) ||
+        book.author.toLowerCase().includes(search.toLowerCase())
     );
   }, [books, search]);
 
@@ -51,11 +41,10 @@ function App() {
       <div className="flex-1 w-full px-6 py-16">
         <div className="max-w-6xl mx-auto">
 
-          <h1 className="text-5xl font-extrabold text-white mb-8 text-center tracking-tight">
-            Biblioteca Digital
+          <h1 className="text-4xl font-light text-white mb-8 text-center tracking-wider">
+            Explora el mundo de los libros y encuentra tu próxima lectura.
           </h1>
 
-          {/* Input de búsqueda */}
           <div className="mb-12 flex justify-center">
             <input
               type="text"
@@ -66,21 +55,18 @@ function App() {
             />
           </div>
 
-          {/* Loading */}
           {loading && (
             <p className="text-center text-white/80 text-lg">
               Cargando libros...
             </p>
           )}
 
-          {/* Error */}
           {error && (
             <p className="text-center text-red-400 text-lg">
               {error}
             </p>
           )}
 
-          {/* Empty state */}
           {!loading && !error && filteredBooks.length === 0 && (
             <div className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-12 text-center shadow-xl">
               <h2 className="text-2xl font-bold text-white mb-4">
@@ -96,13 +82,13 @@ function App() {
             </div>
           )}
 
-          {/* Grid de libros */}
           {!loading && !error && filteredBooks.length > 0 && (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {filteredBooks.map((book) => (
                 <div
                   key={book._id}
-                  className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex flex-col h-full"
+                  onClick={() => navigate(`/books/${book._id}`)}
+                  className="bg-white/10 backdrop-blur-lg border border-white/20 rounded-2xl p-6 shadow-xl hover:scale-[1.02] hover:shadow-2xl transition-all duration-300 flex flex-col h-full cursor-pointer"
                 >
                   <div className="flex-1 flex flex-col">
                     <h2 className="text-2xl font-bold text-white mb-3">

@@ -13,6 +13,7 @@ import AdminBooks from "./features/admin/AdminBooks";
 import PublicRoute from "./components/publicRoute/PublicRoute";
 import RootLayout from "./components/rootLayout/RootLayout";
 import ErrorPage from "./components/ErrorPage";
+import BookDetail from "./features/detail/BookDetail";
 
 const router = createBrowserRouter([
     // Rutas públicas generales
@@ -22,6 +23,11 @@ const router = createBrowserRouter([
             {
                 path: "/",
                 element: <App />,
+                errorElement: <ErrorPage />
+            },
+            {
+                path: "/books/:id",
+                element: <BookDetail />,
                 errorElement: <ErrorPage />
             },
             {
