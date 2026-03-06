@@ -9,6 +9,7 @@ import { Register } from "./features/register/Register";
 import PublicLayout from "./publicLayout";
 import PrivateLayout from "./privateLayout";
 import type { AppDispatch } from "./store/store";
+import AdminBooks from "./features/admin/AdminBooks";
 import PublicRoute from "./components/publicRoute/PublicRoute";
 import RootLayout from "./components/rootLayout/RootLayout";
 import ErrorPage from "./components/ErrorPage";
@@ -58,7 +59,8 @@ const router = createBrowserRouter([
         ),
         children: [
             {
-                path: "",
+                path: "/admin/books",
+                element: <AdminBooks />,
                 errorElement: <ErrorPage />
             },
         ],

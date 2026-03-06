@@ -18,7 +18,7 @@ const PublicLayout = () => {
                         to="/"
                         className="text-2xl font-extrabold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent tracking-tight"
                     >
-                        Biblioteca App
+                        Ecos de Lectura
                     </Link>
 
                     {/* HAMBURGUESA BOTÓN */}
