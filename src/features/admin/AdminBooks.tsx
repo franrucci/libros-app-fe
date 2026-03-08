@@ -56,7 +56,7 @@ const AdminBooks = () => {
             <div className="max-w-5xl mx-auto">
 
                 {/* Header */}
-                <div className="flex justify-between items-center mb-10">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-10">
                     <h2 className="text-4xl font-extrabold text-white tracking-tight">
                         Administrar Libros
                     </h2>
@@ -64,7 +64,7 @@ const AdminBooks = () => {
                     {currentUserId && (
                         <button
                             onClick={() => setIsCreateOpen(true)}
-                            className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-xl shadow-lg transition-all"
+                            className="bg-cyan-500 hover:bg-cyan-600 text-white px-6 py-3 rounded-xl shadow-lg transition-all w-full sm:w-auto"
                         >
                             + Nuevo Libro
                         </button>
@@ -83,31 +83,32 @@ const AdminBooks = () => {
                     {books.map((book) => (
                         <div
                             key={book._id}
-                            className={`flex justify-between items-center p-6 transition ${book.isActive ? "hover:bg-white/10" : "opacity-60"
+                            className={`flex flex-col md:flex-row md:justify-between md:items-center gap-6 p-6 transition ${book.isActive ? "hover:bg-white/10" : "opacity-60"
                                 }`}
                         >
-                            <div className="flex items-center gap-4">
+                            {/* Info libro */}
+                            <div className="flex items-start gap-4">
                                 <img
                                     src={book.coverImage}
                                     alt={book.title}
-                                    className="w-14 h-14 object-cover rounded-md"
+                                    className="w-16 h-16 object-cover rounded-md flex-shrink-0"
                                 />
 
                                 <div>
-                                    <h3 className="text-xl font-bold text-white flex items-center gap-3">
+                                    <h3 className="text-xl font-bold text-white">
                                         {book.title}
-
-                                        <span
-                                            className={`text-xs px-2 py-1 rounded-full ${book.isActive
-                                                ? "bg-green-500/20 text-green-300"
-                                                : "bg-red-500/20 text-red-300"
-                                                }`}
-                                        >
-                                            {book.isActive ? "Activo" : "Inactivo"}
-                                        </span>
                                     </h3>
 
-                                    <p className="text-white/70 text-sm">
+                                    <span
+                                        className={`text-xs px-2 py-1 rounded-full w-fit mt-1 inline-block ${book.isActive
+                                            ? "bg-green-500/20 text-green-300"
+                                            : "bg-red-500/20 text-red-300"
+                                            }`}
+                                    >
+                                        {book.isActive ? "Activo" : "Inactivo"}
+                                    </span>
+
+                                    <p className="text-white/70 text-sm mt-2">
                                         Autor:{" "}
                                         <span className="text-cyan-300">
                                             {book.author}
@@ -121,13 +122,13 @@ const AdminBooks = () => {
                             </div>
 
                             {/* Botones */}
-                            <div className="flex gap-3">
+                            <div className="flex flex-col sm:flex-row gap-2 sm:gap-3 w-full md:w-auto">
                                 <button
                                     onClick={() => {
                                         setSelectedBook(book);
                                         setIsEditOpen(true);
                                     }}
-                                    className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition"
+                                    className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-lg transition w-full sm:w-auto"
                                 >
                                     Editar
                                 </button>
@@ -137,7 +138,7 @@ const AdminBooks = () => {
                                     className={`${book.isActive
                                         ? "bg-yellow-500 hover:bg-yellow-600"
                                         : "bg-green-500 hover:bg-green-600"
-                                        } text-white px-4 py-2 rounded-lg transition`}
+                                        } text-white px-4 py-2 rounded-lg transition w-full sm:w-auto`}
                                 >
                                     {book.isActive ? "Desactivar" : "Activar"}
                                 </button>
@@ -147,7 +148,7 @@ const AdminBooks = () => {
                                         setSelectedBook(book);
                                         setIsDeleteOpen(true);
                                     }}
-                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
+                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition w-full sm:w-auto"
                                 >
                                     Eliminar
                                 </button>
@@ -175,7 +176,7 @@ const AdminBooks = () => {
                 />
             )}
 
-            {/* Modal de confirmación de eliminación */}
+            {/* Modal eliminación */}
             {isDeleteOpen && selectedBook && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
                     <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-2xl w-96">
