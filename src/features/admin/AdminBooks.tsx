@@ -19,7 +19,7 @@ const AdminBooks = () => {
 
     const fetchBooks = async () => {
         try {
-            const response = await firebaseAxios.get("/book");
+            const response = await firebaseAxios.get("/book/admin");
             setBooks(response.data.data);
         } catch (error) {
             console.error(error);
@@ -37,11 +37,18 @@ const AdminBooks = () => {
         fetchBooks();
     };
 
-    const handleDeleteSoft = async () => {
-        if (!selectedBook) return;
-        await firebaseAxios.patch(`/book/soft/${selectedBook._id}`);
-        setIsDeleteOpen(false);
-        fetchBooks();
+    const handleToggleStatus = async (book: Book) => {
+        try {
+            if (book.isActive) {
+                await firebaseAxios.patch(`/book/soft/${book._id}`);
+            } else {
+                await firebaseAxios.patch(`/book/activate/${book._id}`);
+            }
+
+            fetchBooks();
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -76,7 +83,8 @@ const AdminBooks = () => {
                     {books.map((book) => (
                         <div
                             key={book._id}
-                            className="flex justify-between items-center p-6 hover:bg-white/10 transition"
+                            className={`flex justify-between items-center p-6 transition ${book.isActive ? "hover:bg-white/10" : "opacity-60"
+                                }`}
                         >
                             <div className="flex items-center gap-4">
                                 <img
@@ -86,12 +94,26 @@ const AdminBooks = () => {
                                 />
 
                                 <div>
-                                    <h3 className="text-xl font-bold text-white">
+                                    <h3 className="text-xl font-bold text-white flex items-center gap-3">
                                         {book.title}
+
+                                        <span
+                                            className={`text-xs px-2 py-1 rounded-full ${book.isActive
+                                                ? "bg-green-500/20 text-green-300"
+                                                : "bg-red-500/20 text-red-300"
+                                                }`}
+                                        >
+                                            {book.isActive ? "Activo" : "Inactivo"}
+                                        </span>
                                     </h3>
+
                                     <p className="text-white/70 text-sm">
-                                        Autor: <span className="text-cyan-300">{book.author}</span>
+                                        Autor:{" "}
+                                        <span className="text-cyan-300">
+                                            {book.author}
+                                        </span>
                                     </p>
+
                                     <p className="text-white/50 text-xs mt-1">
                                         Creado por: {book.user.name} {book.user.lastName}
                                     </p>
@@ -111,11 +133,21 @@ const AdminBooks = () => {
                                 </button>
 
                                 <button
+                                    onClick={() => handleToggleStatus(book)}
+                                    className={`${book.isActive
+                                        ? "bg-yellow-500 hover:bg-yellow-600"
+                                        : "bg-green-500 hover:bg-green-600"
+                                        } text-white px-4 py-2 rounded-lg transition`}
+                                >
+                                    {book.isActive ? "Desactivar" : "Activar"}
+                                </button>
+
+                                <button
                                     onClick={() => {
                                         setSelectedBook(book);
                                         setIsDeleteOpen(true);
                                     }}
-                                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition"
+                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition"
                                 >
                                     Eliminar
                                 </button>
@@ -125,7 +157,7 @@ const AdminBooks = () => {
                 </div>
             </div>
 
-            {/* ------------------ MODALES ------------------ */}
+            {/* MODALES */}
 
             {isCreateOpen && currentUserId && (
                 <CreateBookModal
@@ -143,35 +175,31 @@ const AdminBooks = () => {
                 />
             )}
 
+            {/* Modal de confirmación de eliminación */}
             {isDeleteOpen && selectedBook && (
                 <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50">
                     <div className="bg-white/10 backdrop-blur-lg border border-white/20 p-8 rounded-2xl shadow-2xl w-96">
+
                         <h3 className="text-xl font-bold text-white mb-6 text-center">
-                            ¿Qué tipo de eliminación querés hacer?
+                            ¿Seguro que querés eliminar este libro?
                         </h3>
 
-                        <div className="flex flex-col gap-4">
-                            <button
-                                onClick={handleDeleteSoft}
-                                className="bg-yellow-500 hover:bg-yellow-600 text-white py-3 rounded-xl transition"
-                            >
-                                Eliminación Lógica
-                            </button>
-
+                        <div className="flex gap-4">
                             <button
                                 onClick={handleDeleteHard}
-                                className="bg-red-600 hover:bg-red-700 text-white py-3 rounded-xl transition"
+                                className="bg-red-600 hover:bg-red-700 text-white w-full py-3 rounded-xl transition"
                             >
-                                Eliminación Física
+                                Eliminar
                             </button>
 
                             <button
                                 onClick={() => setIsDeleteOpen(false)}
-                                className="border border-white/30 text-white py-3 rounded-xl hover:bg-white/10 transition"
+                                className="border border-white/30 text-white w-full py-3 rounded-xl hover:bg-white/10 transition"
                             >
                                 Cancelar
                             </button>
                         </div>
+
                     </div>
                 </div>
             )}
