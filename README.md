@@ -1,6 +1,6 @@
 # Frontend - Ecos de Lectura
 
-Este es el frontend de la aplicación Ecos de Lectura 
+Este es el frontend de la aplicación web Ecos de Lectura. 
 Permite explorar libros, visualizar su información detallada y gestionar registros de libros.
 
 ---
