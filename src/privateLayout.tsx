@@ -92,7 +92,11 @@ const PrivateLayout = () => {
             {/* FOOTER */}
             <footer className="text-center py-6 text-sm text-white/60 border-t border-white/10 backdrop-blur-md bg-white/5 rounded-t-xl shadow-inner">
                 <p className="space-x-2">
-                    <span>Biblioteca App</span>
+                    <span>Ecos de Lectura</span>
+                    <span>|</span>
+                    <span>Desarrollado por Francisco Rucci</span>
+                    <span>|</span>
+                    <span>franrucci01@gmail.com</span>
                 </p>
             </footer>
         </div>
